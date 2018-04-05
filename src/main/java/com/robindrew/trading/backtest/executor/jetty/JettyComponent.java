@@ -35,9 +35,9 @@ public class JettyComponent extends JettyVelocityComponent {
 		handler.uri("/BeanOperation", new BeanOperationPage(getContext(), "site/common/BeanOperation.html"));
 
 		// Register extra pages
-		handler.uri("/History", new HistoryPage(getContext(), "site/backtest/History.html"));
+		handler.uri("/History", new HistoryPage(getContext(), "site/backtest/executor/History.html"));
 
-		handler.resources("/images/.+", "site/igindex/trader");
+		handler.resources("/images/.+", "site/backtest/executor");
 	}
 
 	private IHttpExecutor newIndexPage(IVelocityHttpContext context, String templateName) {

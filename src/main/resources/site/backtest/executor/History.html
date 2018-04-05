@@ -30,9 +30,6 @@ body { padding-top: 10px; }
 <a class="navbar-brand" href="/">${serviceName} #${serviceInstance}</a>
 </div>
 <ul class="nav navbar-nav">
-<li><a href="/Accounts"><span class="glyphicon glyphicon-piggy-bank"></span> Accounts</a></li>
-<li><a href="/Positions"><span class="glyphicon glyphicon-list-alt"></span> Positions</a></li>
-<li><a href="/Instruments"><span class="glyphicon glyphicon-globe"></span> Instruments</a></li>
 <li class="active"><a href="/History"><span class="glyphicon glyphicon-signal"></span> History</a></li>
 </ul>
 <ul class="nav navbar-nav navbar-right">
@@ -56,7 +53,7 @@ body { padding-top: 10px; }
 <div class="col-md-3">
 
 <div class="dropdown top-spacer">
-<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Provider
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Provider
 <span class="caret"></span></button>
 <ul class="dropdown-menu">
 #foreach($entry in $providers)
@@ -69,7 +66,7 @@ body { padding-top: 10px; }
 </div>
 
 <div class="dropdown top-spacer">
-<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Instrument
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Instrument
 <span class="caret"></span></button>
 <ul class="dropdown-menu">
 #foreach($entry in $instruments)
@@ -84,12 +81,7 @@ body { padding-top: 10px; }
 <div class="top-spacer">From Date</div>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
-<input id="Value_From_Date" type="text" class="form-control" placeholder="Enter a date" value="${from}" aria-describedby="basic-addon1">
-</div>
-
-<div class="top-spacer">Periods</div>
-<div class="input-group">
-<input id="Value_Number" type="text" class="form-control" placeholder="Enter a date" value="${number}" aria-describedby="basic-addon1" size="3">
+<input id="Value_From_Date" type="text" class="form-control" placeholder="Enter a date" value="${date}" aria-describedby="basic-addon1">
 </div>
 
 <div class="top-spacer">Frequency</div>
@@ -155,10 +147,9 @@ function drawChart() {
 </script>
 <script>
 $("#Button_Draw_Chart").click(function() {
-	var from = $("#Value_From_Date").val();
-	var number = $("#Value_Number").val();
+	var date = $("#Value_From_Date").val();
 	var period = $("#Value_Period").text();
-	window.location.replace("/History?from=" + from + "&number=" + number + "&period=" + period);
+	window.location.replace("/History?date=" + date + "&period=" + period);
 });
 </script>
 </body>
