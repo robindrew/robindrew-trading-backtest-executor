@@ -5,6 +5,7 @@ import com.robindrew.common.service.component.heartbeat.HeartbeatComponent;
 import com.robindrew.common.service.component.logging.LoggingComponent;
 import com.robindrew.common.service.component.properties.PropertiesComponent;
 import com.robindrew.common.service.component.stats.StatsComponent;
+import com.robindrew.trading.backtest.executor.jetty.JettyComponent;
 
 public class BacktestExecutorService extends AbstractService {
 
@@ -20,6 +21,7 @@ public class BacktestExecutorService extends AbstractService {
 	private final PropertiesComponent properties = new PropertiesComponent();
 	private final LoggingComponent logging = new LoggingComponent();
 	private final StatsComponent stats = new StatsComponent();
+	private final JettyComponent jetty = new JettyComponent();
 
 	public BacktestExecutorService(String[] args) {
 		super(args);
@@ -31,10 +33,12 @@ public class BacktestExecutorService extends AbstractService {
 		start(logging);
 		start(heartbeat);
 		start(stats);
+		start(jetty);
 	}
 
 	@Override
 	protected void shutdownService() throws Exception {
+		stop(jetty);
 		stop(heartbeat);
 	}
 }

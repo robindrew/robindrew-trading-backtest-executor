@@ -1,0 +1,165 @@
+<html>
+
+
+<head>
+<title>${title}</title>
+
+<!-- CSS -->
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css">
+
+<style>
+body { padding-top: 10px; }
+.top-spacer {padding-top: 10px; }]
+</style>
+
+
+</head>
+
+
+<body>
+
+<!-- START CONTAINER -->
+<div class="container">
+
+
+<!-- NAV BAR -->
+<nav class="navbar navbar-default">
+<div class="container-fluid">
+<div class="navbar-header">
+<a class="navbar-brand" href="/">${serviceName} #${serviceInstance}</a>
+</div>
+<ul class="nav navbar-nav">
+<li><a href="/Accounts"><span class="glyphicon glyphicon-piggy-bank"></span> Accounts</a></li>
+<li><a href="/Positions"><span class="glyphicon glyphicon-list-alt"></span> Positions</a></li>
+<li><a href="/Instruments"><span class="glyphicon glyphicon-globe"></span> Instruments</a></li>
+<li class="active"><a href="/History"><span class="glyphicon glyphicon-signal"></span> History</a></li>
+</ul>
+<ul class="nav navbar-nav navbar-right">
+<li><a href="#">${environment}</a></li>
+</ul>
+</div><!-- /.container-fluid -->
+</nav>
+<!-- NAV BAR -->
+
+
+<!-- START ROW -->
+<div class="row">
+
+<!-- TITLE -->
+<div class="col-md-12">
+<h3><span class="glyphicon glyphicon-signal"></span> History</h3>
+<hr/>
+</div>
+
+<!-- SIDE BAR -->
+<div class="col-md-3">
+
+<div class="dropdown top-spacer">
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Provider
+<span class="caret"></span></button>
+<ul class="dropdown-menu">
+#foreach($entry in $providers)
+<li #if($provider == $entry) class="active" #end><a href="/History?provider=${entry}">${entry}</a></li>
+#end
+</ul>
+#if($provider)
+&nbsp;&nbsp;${provider}
+#end
+</div>
+
+<div class="dropdown top-spacer">
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Select Instrument
+<span class="caret"></span></button>
+<ul class="dropdown-menu">
+#foreach($entry in $instruments)
+<li #if($instrument == $entry) class="active" #end><a href="/History?instrument=${entry.name}">${entry.name}</a></li>
+#end
+</ul>
+#if($instrument)
+&nbsp;&nbsp;${instrument.name}
+#end
+</div>
+
+<div class="top-spacer">From Date</div>
+<div class="input-group">
+<span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
+<input id="Value_From_Date" type="text" class="form-control" placeholder="Enter a date" value="${from}" aria-describedby="basic-addon1">
+</div>
+
+<div class="top-spacer">Periods</div>
+<div class="input-group">
+<input id="Value_Number" type="text" class="form-control" placeholder="Enter a date" value="${number}" aria-describedby="basic-addon1" size="3">
+</div>
+
+<div class="top-spacer">Frequency</div>
+<div class="dropdown">
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span id="Value_Period">${period}</span> <span class="caret"></span></button>
+<ul class="dropdown-menu">
+#foreach($entry in $periods)
+<li><a href="#" onclick='$("#Value_Period").text("${entry}")'>${entry}</a></li>
+#end
+</ul>
+&nbsp;&nbsp;
+</div>
+
+<div class="top-spacer">
+<button id="Button_Draw_Chart" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Draw Chart</button>
+</div>
+
+
+</div>
+
+<!-- CHART -->
+<div class="col-md-9">
+	<div id="chart_div" style="width: 100%; height: 500px;">#if(!$chartData)No historic prices available for this time frame.#end</div>
+</div>
+
+
+<!-- END CONTAINER -->
+</div>
+
+
+
+<!-- JavaScript -->
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" ></script>
+<script src="https://www.gstatic.com/charts/loader.js"></script>
+<script type="text/javascript">
+#if($chartData)
+
+google.charts.load('current', {'packages':['corechart']});
+google.charts.setOnLoadCallback(drawChart);
+
+function drawChart() {
+
+	// Chart Data
+	var data = google.visualization.arrayToDataTable([$chartData], true);
+
+	// Chart Options
+    var options = {
+      	legend:'none',
+		bar: { groupWidth: '90%' },
+        candlestick: {
+        	fallingColor: { strokeWidth: 0, fill: '#a52714' }, // RED
+            risingColor:  { strokeWidth: 0, fill: '#0f9d58' }  // GREEN
+		}
+	};
+
+	// Chart Draw!
+    var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
+	chart.draw(data, options);
+}
+
+#end
+</script>
+<script>
+$("#Button_Draw_Chart").click(function() {
+	var from = $("#Value_From_Date").val();
+	var number = $("#Value_Number").val();
+	var period = $("#Value_Period").text();
+	window.location.replace("/History?from=" + from + "&number=" + number + "&period=" + period);
+});
+</script>
+</body>
+</html>
