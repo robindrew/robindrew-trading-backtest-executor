@@ -30,9 +30,10 @@ public class HistoryPage extends AbstractServicePage {
 
 		HistoryQuery query = new HistoryQuery(request, dataMap);
 		List<IPriceCandle> candles = query.getCandles();
+		dataMap.put("candles", candles);
 
 		// Google Chart Data
-		dataMap.put("chartData", getChartData(candles));
+		// dataMap.put("chartData", getChartData(candles));
 	}
 
 	private String getChartData(List<IPriceCandle> candles) {

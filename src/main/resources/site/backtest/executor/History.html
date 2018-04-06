@@ -50,41 +50,49 @@ body { padding-top: 10px; }
 </div>
 
 <!-- SIDE BAR -->
-<div class="col-md-3">
+<div class="col-md-12">
 
-<div class="dropdown top-spacer">
-<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Provider
+<table>
+<tr>
+
+<td>
+<div class="dropdown">
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">${provider}
 <span class="caret"></span></button>
 <ul class="dropdown-menu">
 #foreach($entry in $providers)
 <li #if($provider == $entry) class="active" #end><a href="/History?provider=${entry}">${entry}</a></li>
 #end
 </ul>
-#if($provider)
-&nbsp;&nbsp;${provider}
-#end
 </div>
+</td>
 
-<div class="dropdown top-spacer">
-<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">Instrument
+<td>&nbsp;&nbsp;&nbsp;</td>
+
+<td>
+<div class="dropdown">
+<button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown">${instrument.name}
 <span class="caret"></span></button>
 <ul class="dropdown-menu">
 #foreach($entry in $instruments)
 <li #if($instrument == $entry) class="active" #end><a href="/History?instrument=${entry.name}">${entry.name}</a></li>
 #end
 </ul>
-#if($instrument)
-&nbsp;&nbsp;${instrument.name}
-#end
 </div>
+</td>
 
-<div class="top-spacer">From Date</div>
+<td>&nbsp;&nbsp;&nbsp;</td>
+
+<td>
 <div class="input-group">
 <span class="input-group-addon" id="basic-addon1"><span class="glyphicon glyphicon-calendar" aria-hidden="true"></span></span>
 <input id="Value_From_Date" type="text" class="form-control" placeholder="Enter a date" value="${date}" aria-describedby="basic-addon1">
 </div>
+<td>
 
-<div class="top-spacer">Frequency</div>
+<td>&nbsp;&nbsp;&nbsp;</td>
+
+<td>
 <div class="dropdown">
 <button class="btn btn-default dropdown-toggle" type="button" data-toggle="dropdown"><span id="Value_Period">${period}</span> <span class="caret"></span></button>
 <ul class="dropdown-menu">
@@ -94,21 +102,36 @@ body { padding-top: 10px; }
 </ul>
 &nbsp;&nbsp;
 </div>
+</td>
 
-<div class="top-spacer">
+<td>
 <button id="Button_Draw_Chart" class="btn btn-primary dropdown-toggle" type="button" data-toggle="dropdown">Draw Chart</button>
+</td>
+
+</tr>
+</table>
 </div>
+
+
 
 
 </div>
 
 <!-- CHART -->
-<div class="col-md-9">
-	<div id="chart_div" style="width: 100%; height: 500px;">#if(!$chartData)No historic prices available for this time frame.#end</div>
+#if($chartData)
+<div class="col-md-12">
+	<div id="chart_div" style="width: 100%; height: 500px;"></div>
 </div>
+#end
 
 <div class="col-md-12">
-<image src="Chart.png?width=1000&height=600&provider=${provider}&instrument=${instrument.name}&date=${date}&period=${period}"/>
+#if($candles.isEmpty())
+<br/>
+<br/>
+No historic prices available for this time frame
+#else
+<image width="1000" height="600" src="Chart.png?width=1000&height=600&provider=${provider}&instrument=${instrument.name}&date=${date}&period=${period}"/>
+#end
 </div>
 
 <!-- END CONTAINER -->
@@ -120,9 +143,9 @@ body { padding-top: 10px; }
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.js"></script>
 <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.js" ></script>
 <script src="https://www.gstatic.com/charts/loader.js"></script>
-<script type="text/javascript">
-#if($chartData)
 
+#if($chartData)
+<script type="text/javascript">
 google.charts.load('current', {'packages':['corechart']});
 google.charts.setOnLoadCallback(drawChart);
 
@@ -145,9 +168,9 @@ function drawChart() {
     var chart = new google.visualization.CandlestickChart(document.getElementById('chart_div'));
 	chart.draw(data, options);
 }
-
-#end
 </script>
+#end
+
 <script>
 $("#Button_Draw_Chart").click(function() {
 	var date = $("#Value_From_Date").val();
