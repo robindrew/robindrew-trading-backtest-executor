@@ -14,6 +14,7 @@ import com.robindrew.common.service.component.jetty.handler.page.IndexPage;
 import com.robindrew.common.service.component.jetty.handler.page.SystemPage;
 import com.robindrew.common.template.ITemplateLocator;
 import com.robindrew.common.template.velocity.VelocityTemplateLocatorSupplier;
+import com.robindrew.trading.backtest.executor.jetty.page.ChartPage;
 import com.robindrew.trading.backtest.executor.jetty.page.HistoryPage;
 
 public class JettyComponent extends JettyVelocityComponent {
@@ -36,6 +37,7 @@ public class JettyComponent extends JettyVelocityComponent {
 
 		// Register extra pages
 		handler.uri("/History", new HistoryPage(getContext(), "site/backtest/executor/History.html"));
+		handler.uri("/Chart.png", new ChartPage());
 
 		handler.resources("/images/.+", "site/backtest/executor");
 	}
