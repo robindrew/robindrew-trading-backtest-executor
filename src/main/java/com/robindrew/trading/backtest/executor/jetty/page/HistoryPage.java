@@ -20,6 +20,8 @@ public class HistoryPage extends AbstractServicePage {
 
 	private static final int MAXIMUM_CHART_CANDLES = 120;
 
+	private boolean chartDataEnabled = false;
+
 	public HistoryPage(IVelocityHttpContext context, String templateName) {
 		super(context, templateName);
 	}
@@ -33,7 +35,9 @@ public class HistoryPage extends AbstractServicePage {
 		dataMap.put("candles", candles);
 
 		// Google Chart Data
-		// dataMap.put("chartData", getChartData(candles));
+		if (chartDataEnabled) {
+			dataMap.put("chartData", getChartData(candles));
+		}
 	}
 
 	private String getChartData(List<IPriceCandle> candles) {
