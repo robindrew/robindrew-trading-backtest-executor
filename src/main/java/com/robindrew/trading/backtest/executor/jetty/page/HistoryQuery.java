@@ -21,11 +21,11 @@ import com.robindrew.common.http.servlet.request.IHttpRequest;
 import com.robindrew.trading.IInstrument;
 import com.robindrew.trading.price.candle.IPriceCandle;
 import com.robindrew.trading.price.candle.PriceCandles;
-import com.robindrew.trading.price.candle.format.pcf.source.IPcfSourceManager;
+import com.robindrew.trading.price.candle.format.pcf.source.IPcfSourceProviderManager;
 import com.robindrew.trading.price.candle.interval.IPriceInterval;
 import com.robindrew.trading.price.candle.io.stream.source.IPriceCandleStreamSource;
-import com.robindrew.trading.provider.ITradeDataProvider;
-import com.robindrew.trading.provider.TradeDataProvider;
+import com.robindrew.trading.provider.ITradingProvider;
+import com.robindrew.trading.provider.TradingProvider;
 
 public class HistoryQuery {
 
@@ -44,20 +44,18 @@ public class HistoryQuery {
 		String dateTime = get(request, "date", "2016-01-01 00:00:00");
 		String period = get(request, "period", "1 Hour");
 
-		IPcfSourceManager manager = getDependency(IPcfSourceManager.class);
+		IPcfSourceProviderManager manager = getDependency(IPcfSourceProviderManager.class);
 
 		// Provider
-		Set<ITradeDataProvider> providers = manager.getProviders();
-		ITradeDataProvider provider = providers.iterator().next();
+		ITradingProvider provider = manager.getProvider();
 		if (!providerName.isEmpty()) {
-			provider = TradeDataProvider.valueOf(providerName);
+			provider = TradingProvider.valueOf(providerName);
 		}
 		log.info("[Provider] {}", provider);
 		dataMap.put("provider", provider);
-		dataMap.put("providers", providers);
 
 		// Instrument
-		Set<? extends IInstrument> instruments = manager.getInstruments(provider);
+		Set<? extends IInstrument> instruments = manager.getInstruments();
 		IInstrument instrument = instruments.iterator().next();
 		if (!instrumentName.isEmpty()) {
 			for (IInstrument entry : instruments) {
@@ -105,7 +103,7 @@ public class HistoryQuery {
 		return LocalDateTime.of(date, time);
 	}
 
-	private List<IPriceCandle> getPriceCandles(IPcfSourceManager manager, ITradeDataProvider provider, IInstrument instrument, LocalDateTime date, String period) {
+	private List<IPriceCandle> getPriceCandles(IPcfSourceProviderManager manager, ITradingProvider provider, IInstrument instrument, LocalDateTime date, String period) {
 
 		// Dates
 		LocalDateTime fromDate = date;
@@ -115,7 +113,7 @@ public class HistoryQuery {
 		TimeUnit unit = TimeUnit.HOURS;
 
 		// Get the source
-		IPriceCandleStreamSource source = manager.getSourceSet(instrument, provider).asStreamSource(fromDate, toDate);
+		IPriceCandleStreamSource source = manager.getSourceSet(instrument).asStreamSource(fromDate, toDate);
 		source = PriceCandles.aggregate(source, interval, unit);
 
 		return PriceCandles.drainToList(source);
