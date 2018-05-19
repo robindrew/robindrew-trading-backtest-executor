@@ -39,10 +39,10 @@ public class HistoryQuery {
 
 	public HistoryQuery(IHttpRequest request, Map<String, Object> dataMap) {
 
-		String providerName = get(request, "provider", "");
-		String instrumentName = get(request, "instrument", "");
-		String dateTime = get(request, "date", "2016-01-01 00:00:00");
-		String period = get(request, "period", "1 Hour");
+		String providerName = request.getString("provider", "");
+		String instrumentName = request.getString("instrument", "");
+		String dateTime = request.getString("date", "2016-01-01 00:00:00");
+		String period = request.getString("period", "1 Hour");
 
 		IPcfSourceProviderManager manager = getDependency(IPcfSourceProviderManager.class);
 
@@ -61,7 +61,7 @@ public class HistoryQuery {
 			for (IInstrument entry : instruments) {
 				if (entry.getName().equals(instrumentName)) {
 					instrument = entry;
-					request.setValue("instrument", instrumentName);
+					request.set("instrument", instrumentName);
 					break;
 				}
 			}
@@ -117,16 +117,6 @@ public class HistoryQuery {
 		source = PriceCandles.aggregate(source, interval, unit);
 
 		return PriceCandles.drainToList(source);
-	}
-
-	private String get(IHttpRequest request, String key, String defaultValue) {
-		String value = request.get(key, "");
-		if (value.isEmpty()) {
-			value = request.getValue(key, defaultValue);
-		} else {
-			request.setValue(key, value);
-		}
-		return value;
 	}
 
 	public List<String> getPeriods() {

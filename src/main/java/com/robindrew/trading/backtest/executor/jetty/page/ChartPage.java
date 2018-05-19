@@ -17,8 +17,8 @@ public class ChartPage implements IHttpExecutor {
 	@Override
 	public void execute(IHttpRequest request, IHttpResponse response) {
 
-		int width = request.getInt("width");
-		int height = request.getInt("height");
+		int width = request.getInteger("width");
+		int height = request.getInteger("height");
 
 		HistoryQuery query = new HistoryQuery(request);
 		IPriceInterval interval = query.getInterval();
