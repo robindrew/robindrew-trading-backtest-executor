@@ -1,0 +1,11 @@
+<release>
+   <groupId>com.robindrew</groupId>
+   <artifactId>robindrew-trading-backtest-executor</artifactId>
+   <version>3.0</version>
+   <releaseVersions>
+      <releaseVersion>
+         <hash>dbf96e7787b96eb6803053e2a9b2367f</hash>
+         <version>3.0.1</version>
+      </releaseVersion>
+   </releaseVersions>
+</release>
