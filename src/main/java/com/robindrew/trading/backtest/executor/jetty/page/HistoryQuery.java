@@ -21,7 +21,7 @@ import com.robindrew.common.http.servlet.request.IHttpRequest;
 import com.robindrew.trading.IInstrument;
 import com.robindrew.trading.price.candle.IPriceCandle;
 import com.robindrew.trading.price.candle.PriceCandles;
-import com.robindrew.trading.price.candle.format.pcf.source.IPcfSourceManager;
+import com.robindrew.trading.price.candle.format.pcf.source.IPcfSourceProviderLocator;
 import com.robindrew.trading.price.candle.format.pcf.source.IPcfSourceProviderManager;
 import com.robindrew.trading.price.candle.interval.IPriceInterval;
 import com.robindrew.trading.price.candle.io.stream.source.IPriceCandleStreamSource;
@@ -45,7 +45,7 @@ public class HistoryQuery {
 		String dateTime = request.getString("date", "2016-01-01 00:00:00");
 		String period = request.getString("period", "1 Hour");
 
-		IPcfSourceManager manager = getDependency(IPcfSourceManager.class);
+		IPcfSourceProviderLocator manager = getDependency(IPcfSourceProviderLocator.class);
 
 		Set<? extends IPcfSourceProviderManager> tradingProviders = manager.getProviders();
 
